@@ -3,11 +3,11 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: "./src/index.js",
+  mode: "development",
+  entry: "./src/js/index.js",
   output: {
-    publicPath: "auto",
     path: path.resolve(__dirname, "dist"),
-    filename: "my-bundle.js",
+    filename: ".my-bundle.js",
   },
   module: {
     rules: [
@@ -20,14 +20,24 @@ module.exports = {
         exclude: /node_modules/,
         use: ["babel-loader"],
       },
+      { test: /\.hbs$/, loader: "handlebars-loader" },
+      {
+        test: /\.(jpg|png|svg|gif)$/,
+        type: "asset/resource",
+      },
     ],
   },
   devServer: {
+    static: {
+      directory: path.resolve(__dirname, "dist"),
+    },
     port: 8080,
     open: true,
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: "./src/index.html" }),
-    new MiniCssExtractPlugin({filename:'styles.css'}),
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+    }),
+    new MiniCssExtractPlugin({ filename: "css/index.css" }),
   ],
 };
